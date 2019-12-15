@@ -1,7 +1,7 @@
 <img width="180px" style="border-radius: 50%" bor src="_media/logo.jpeg">
 
 
-# Node.js学习心得
+# Node.js学习笔记
 
 - 本文档是作者从事 ```Node.js Developer``` 以来的学习历程，旨在记录作者在工作、生活中遇到的和值得记录的问题！
 
