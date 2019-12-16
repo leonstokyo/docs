@@ -109,7 +109,7 @@ const addTwoNumbers = function(l1, l2) {
 
 ```
 输入: "abcabcbb"
-输出: 3 
+输出: 3
 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为3。
 
 输入: "bbbbb"
@@ -141,7 +141,7 @@ const lengthOfLongestSubstring = function(s) {
            }
        }
        result = Math.max(result, tmp.length);
-   } 
+   }
    return result;
 };
 ```
@@ -184,7 +184,7 @@ const reverse = function(x) {
     if (x < 0) {
         x = -1 * x;
         flag = true
-    } 
+    }
     let result = parseInt(x.toString().split('').reverse().join(''));
     // 这里用到了字符分割为数组、数字的反转和拼接为字符串的方法
     if (result >= Math.pow(2, 31)) return 0;
@@ -297,7 +297,7 @@ const maxArea = function(height) {
     D         500
     M         1000
 ```
-例如，罗马数字`2`写做`II`，即为两个并列的`1`。`12`写做`XII`，即为`X + II`。 
+例如，罗马数字`2`写做`II`，即为两个并列的`1`。`12`写做`XII`，即为`X + II`。
 `27`写做`XXVII`, 即为`XX`+`V`+`II` 。
 
 通常情况下，罗马数字中小的数字在大的数字的右边。
@@ -370,5 +370,210 @@ const romanToInt = function(s) {
         sum += map[s.charAt(i)]
     }
     return sum;
+};
+```
+
+# 14.最长公共前缀
+
+> 简单
+
+##### 题目
+
+编写一个函数来查找字符串数组中的最长公共前缀。
+
+如果不存在公共前缀，返回空字符串`""`。
+
+##### 示例
+```
+输入: ["flower","flow","flight"]
+输出: "fl"
+
+输入: ["dog","racecar","car"]
+输出: ""
+解释: 输入不存在公共前缀。
+```
+
+##### 说明
+所有输入只包含小写字母**a-z**。
+
+##### 实现
+
+```javascript
+/**
+ * @param {string[]} strs
+ * @return {string}
+ */
+const longestCommonPrefix = function(strs) {
+    if (strs.length === 0) {
+        return ''
+    }
+    let prefix = '';
+    let count = strs[0].length;
+    let tmp = strs[0];
+    for (let i = 1; i < strs.length; i++) {
+        if (count > strs[i].length) {
+            count = strs[i].length;
+            tmp = strs[i];
+        }
+    }
+    for (let j = 0; j < count; j++) {
+        let char = tmp.charAt(j);
+        let flag = false;
+        for (const item of strs) {
+            if (item.charAt(j) !== char) {
+                flag = true
+            }
+        }
+        if (!flag) {
+            prefix += char;
+        } else {
+            break;
+        }
+    }
+    return prefix;
+};
+```
+# 20.有效的括号
+
+> 简单
+
+##### 题目
+给定一个只包括`'('，')'，'{'，'}'，'['，']'` 的字符串，判断字符串是否有效。
+
+有效字符串需满足：
+
+1. 左括号必须用相同类型的右括号闭合。
+
+2. 左括号必须以正确的顺序闭合。
+
+注意空字符串可被认为是有效字符串。
+
+
+##### 示例
+```
+输入: "()"
+输出: true
+
+输入: "()[]{}"
+输出: true
+
+输入: "(]"
+输出: false
+
+输入: "([)]"
+输出: false
+
+输入: "{[]}"
+输出: true
+```
+
+##### 思路
+
+对于都是括号的字符串，如果是符合题目条件的。那么，在字符串的最中间一定是一对匹配的括号。
+
+##### 实现
+
+```javascript
+/**
+ * @param {string} s
+ * @return {boolean}
+ */
+const isValid = function(s) {
+    if (s.length % 2 !== 0) {
+          return false
+      }
+      // s中一定存在'{}','[]','()' 中的某一个形式
+      while(s.length) {
+          let tmp = s;
+          s = s.replace('{}', '');
+          s = s.replace('[]', '');
+          s = s.replace('()', '');
+          if (tmp === s) {
+              return false
+          }
+      }
+      return true;
+};
+```
+
+```javascript
+/**
+ * @param {string} s
+ * @return {boolean}
+ */
+const isValid = function(s) {
+    if (s.length % 2 !== 0) {
+        return false
+      }
+      let stack = [];
+      const map = {
+        '}': '{',
+        ']': '[',
+        ')': '('
+      }
+      const left = ['{', '(', '['];
+      for (let i = 0; i < s.length; i++) {
+        const char = s.charAt(i);
+        if (left.indexOf(char) !== -1) {
+          stack.push(char)
+        } else {
+          const tmp = stack.pop();
+          if (tmp !== map[char]) {
+            return false;
+          }
+        }
+      }
+      return !stack.length;
+};
+```
+
+# 21.合并两个有序链表
+
+> 简单
+
+##### 题目
+
+将两个有序链表合并为一个新的有序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。
+
+##### 示例
+```
+输入：1->2->4, 1->3->4
+输出：1->1->2->3->4->4
+```
+
+##### 实现
+
+```javascript
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+/**
+ * @param {ListNode} l1
+ * @param {ListNode} l2
+ * @return {ListNode}
+ */
+const mergeTwoLists = function(l1, l2) {
+    let p = l1;
+    let q = l2;
+    let dumy = new ListNode(1);
+    let result = dumy;
+    while (p || q) {
+        let val1 = p ? p.val : Number.MAX_VALUE;
+        let val2 = q ? q.val : Number.MAX_VALUE;
+        if (val1 <= val2 && p) {
+            result.next = new ListNode(val1);
+            result = result.next;
+            p = p.next
+        } else {
+            result.next = new ListNode(val2);
+            result = result.next;
+            q = q.next
+        }
+    }
+    return dumy.next;
 };
 ```
