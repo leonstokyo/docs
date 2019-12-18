@@ -146,6 +146,109 @@ const lengthOfLongestSubstring = function(s) {
 };
 ```
 
+# 5.最长回文子串
+
+> 中等
+
+##### 题目
+
+给定一个字符串`s`，找到`s`中最长的回文子串。你可以假设`s`的最大长度为`1000`。
+
+##### 示例
+
+```
+输入: "babad"
+输出: "bab"
+注意: "aba" 也是一个有效答案。
+
+输入: "cbbd"
+输出: "bb"
+
+```
+
+##### 中心扩散法
+
+**中心扩散法** 利用回文数的性质，从中心向外扩散，找的不同的中心下最大的回文数。
+
+
+```javascript
+/**
+ * @param {string} s
+ * @return {string}
+ */
+const longestPalindrome = function(s) {
+  let result = '';
+  if (s.length <= 1) {
+    return s;
+  }
+  /**
+   * 
+   * @param left
+   * @param right
+   * @returns {string} 返回该中心下找到的最大长度的回文字符串
+   * 
+   */
+  let extend = (left, right) => {
+    while (left >= 0 && right < s.length && s[left] === s[right]) {
+      left--;
+      right++;
+    }
+    return s.substring(left + 1, right); // 注意子串截取的位置
+  };
+  for (let i = 0; i < s.length; i++) {
+    let str1 = extend(i, i);
+    let str2 = extend(i, i + 1);
+    if (str1.length > str2.length && str1.length > result.length) {
+      result = str1
+    } else if (str2.length > str1.length && str2.length > result.length) {
+      result = str2
+    }
+  }
+  return result;
+};
+```
+
+```javascript
+/**
+ * @param {string} s
+ * @return {string}
+ */
+const longestPalindrome = function(s) {
+  if (s.length <= 1) {
+    return s;
+  }
+  let start = 0;
+  let end = 0;  // 记录已找到的最大的子串的起止坐标
+  /**
+   *
+   * @param left
+   * @param right
+   * @returns {number} 返回该中心下找到的最大子串的长度
+   */
+  let extend = (left, right) => {
+    while (left >= 0 && right < s.length && s[left] === s[right]) {
+      left--;
+      right++;
+    }
+    return right - left - 1;
+  };
+  for (let i = 0; i < s.length; i++) {
+    const length1 = extend(i, i);
+    const length2 = extend(i, i + 1);
+    const maxLength = Math.max(length1, length2);
+    if (maxLength > (end - start + 1)) { // 新的子串更长
+      console.log(maxLength);
+      // 计算新子串的起止坐标，其中心在i或者(i, i + 1)
+      start = i - ((maxLength - 1) >> 1); 
+      // >> 向右移位相当于丢掉后面的位数。此处丢调最后1位，相当于除以2并向下取整
+      end = i + (maxLength >> 1);
+      console.log(start, end);
+    }
+  }
+  return s.substring(start, end + 1);
+};
+```
+
 # 7.整数反转
 
 > 简单
