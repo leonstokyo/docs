@@ -3,9 +3,9 @@
 
 # Node.js学习笔记
 
-- 本文档是作者从事 ```Node.js Developer``` 以来的学习历程，旨在记录作者在工作、生活中遇到的和值得记录的问题！
+- 本文档是作者在学习和工作中有关Node.js的笔记！
 
-[GitHub](<https://github.com/guanlongtao-seu>)
+[GitHub](<https://github.com/jeanseu>)
 [开始阅读](README.md)
 
 ![color](#f0f0f0)
