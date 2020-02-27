@@ -1,6 +1,6 @@
-# LeetCode-算法
+# LeetCode-算法（1-25）
 
-> LeetCode 算法类型题目。
+> LeetCode 算法类型题目（1-25）。
 
 # 1.两数之和
 
@@ -536,6 +536,75 @@ const longestCommonPrefix = function(strs) {
     return prefix;
 };
 ```
+
+# 16.三数之和
+
+> 中等
+
+##### 题目
+
+给定一个包含`n`个整数的数组`nums`，判断`nums`中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？找出所有满足条件且不重复的三元组。
+
+**注意：**答案中不可包含重复三元组。
+##### 示例
+```
+给定数组 nums = [-1, 0, 1, 2, -1, -4]，
+
+满足要求的三元组集合为：
+[
+  [-1, 0, 1],
+  [-1, -1, 2]
+]
+```
+
+##### 思路
+将数组按顺序排序，遍历数组。针对当前值的后续值，取第一个和最后一个值进行运算。则有如下情况：
+1. 当前值大于0，则不会有满足题意的情况。
+2. 1的对立情况下，如果和大于0，则最后一个值向前移动，但不能超过第一个值。
+3. 2的相同情况下，如果和小于0，则第一个值向后移动，但不能超过最后一个值。
+4. 遍历时，遇到相同数字跳过（去重）。
+5. 在游标移动的时候，相同的数值需要跳过。
+
+##### 实现
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+const threeSum = function(nums) {
+  const result = [];
+  if (nums == null || nums.length < 3) return result;
+  nums.sort((a, b) => a - b);
+  for (let i = 0; i < nums.length - 2; i++) {
+    if (nums[i] > 0) break;
+    if (i > 0 && nums[i]=== nums[i - 1]) continue;
+    let start = i + 1;
+    let end = nums.length - 1;
+    while (start < end) {
+      const sum = nums[i] + nums[start] + nums[end];
+      if (sum === 0) {
+        result.push([nums[i], nums[start], nums[end]]);
+        while (start < end && nums[start] === nums[start + 1]) {
+          start++;
+        }
+        while (start < end && nums[end] === nums[end - 1]) {
+          end--;
+        }
+        start++;
+        end--;
+      } else if (sum > 0) {
+        end--;
+      } else if (sum < 0) {
+        start++;
+      }
+    }
+  }
+  return result
+};
+```
+
+
 # 20.有效的括号
 
 > 简单
@@ -680,3 +749,4 @@ const mergeTwoLists = function(l1, l2) {
     return dumy.next;
 };
 ```
+
