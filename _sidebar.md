@@ -10,6 +10,7 @@
     
 * ES6
     * [Promise/A+](/_es6/Promise.md)
+    * [函数的扩展](/_es6/Function.md)
 
 * Algorithm
     * [排序算法](/_algorithm/sort.md)
@@ -23,3 +24,6 @@
 
 * Interview
     * [百度基础架构部-前端](/_interview/baidu_inf.md)
+
+* Network
+    * [Http协议](/_network/http.md)
