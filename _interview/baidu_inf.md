@@ -89,8 +89,72 @@
     
 * Q7：从浏览器发起请求，到用户接收到响应，都经历了哪些过程？
 
+ **1.浏览器对URL拆分解析**。
+    
+  基本形式**scheme://host.domain:port/path/filename**解释为：
+
+  * **scheme** - 定义因特网服务的类型。最常见的类型是**http**
+  * **host** - 定义域主机（http 的默认主机是 www）
+  * **domain** - 定义因特网域名，比如 baidu.com
+  * **:port** - 定义主机上的端口号（http 的默认端口号是 80）
+  * **path** - 定义服务器上的路径（如果省略，则文档必须位于网站的根目录中）
+  * **filename** - 定义文档/资源的名称
+     
+ **2.解析域名获取IP**。
+    
+  * 浏览器现在本地的**hosts**文件中检查是否有相应的**域名**和**IP**的对应关系，如果有则向其IP地址发送请求。
+  * 如果没有，浏览器将domain(域名)发送给DNS进行解析，将IP返回浏览器。
+    
+ **3.通过IP建立网络通信**。
+    
+  一般采用四层模型，从上往下依次为：**应用层**、**传输层**、**网络层**和**数据链路层**。发送端从应用层往下走，
+  接收端从数据链路层往上走。大致的模型图如下：
+  <img style="height:500px" src="_media/network1.png">
+  
+  **网络协议的内容会有专题详解**
+ 
+ **4.页面渲染**。
+
+
 * Q8：你遇到过**跨域**的问题吗？有哪些解决方案？
 
+ **浏览器同源策略**约定请求的url地址，必须与浏览器的url地址处于同域上，也就是**域名**，**端口**，**协议**都相同。
+ 实际上的结果是，请求已经被发送过去了，目标服务器也对请求做出了响应，只是浏览器对非同源请求的返回结果做了拦截。
+ **跨域**就是由于浏览器的同源策略产生的。
+
+ 如何解决跨越问题：
+ 
+  **1.JSONP**
+  全称是**JSON with Padding**是为了解决跨域请求资源而产生的解决方案,是一种依靠开发人员创造出的一种非官方跨域数据交互协议。
+  
+  **2.CORS**
+  
+  **Cross-origin resource sharing,跨域资源共享**，是一个W3C标准，定义了在必须跨越访问资源时，浏览器和服务器应该
+  如何沟通。
+  
+  CORS有两种请求，**简单请求**和**非简单请求**。
+  
+  同时满足下面两大条件的，就是**简单请求**：
+    1. 请求方法是下面三种之一：
+     * HEAD
+     * GET
+     * POST
+    2. HTTP的头信息不超出以下几种字段：
+     * Accept
+     * Accept-Language
+     * Content-Language
+     * Last-Event-ID
+     * Content-Type：只限于三个值**application/x-www-form-urlencoded、multipart/form-data、text/plain**
+   
+   **后端需要加入请求头Access-Control-Allow-Origin**
+   
+   **非简单请求**在发送数据之前会先发第一次请求做预检，只有预检通过后再发一次请求作为数据传输。
+    * 请求方式：**OPTIONS**
+    * 如何预检
+     * Access-Control-Allow-Origin（必含）
+     * 如果复杂请求是**PUT**等请求，则服务端需要设置允许某请求，否则“预检”不通过 **Access-Control-Request-Method**
+     * 如果复杂请求设置了请求头，则服务端需要设置允许某请求头，否则“预检”不通过 **Access-Control-Request-Headers**
+     
 * Q9：你对Ajax了解吗，你能实现一个Ajax吗？
 
 * Q10：你对**ES6**了解吗？
@@ -100,7 +164,42 @@
 * 12：Vue中**组件间通信**有哪些方式？
 
 * 13：Vux中**action**和**mutation**有什么区别？
-
+ ```javascript
+ const store = new Vuex.Store({
+   state: {
+     count: 0
+   },
+   mutations: {
+     increment (state) {
+       state.count++
+     }
+   },
+   actions: {
+     increment (context) {
+       context.commit('increment')
+     }
+   }
+ })
+ ```
+ 1.流程顺序
+ 
+ '相应视图->修改State'实则为两部分，**视图触发Action**，**Action再触发Mutation**。
+ 
+ 2.角色定位
+ 
+ 基于流程顺序，二者扮演的角色也不同。
+ 
+ **Mutation:** 专注于修改State，**理论上是修改State的唯一途径**。
+ 
+ **Action:** 业务代码，异步请求。
+ 
+ 3.限制
+ 
+ 角色不同所以二者的限制不同
+ 
+ **Mutation:** 必须同步执行。
+ 
+ **Action:** 可以异步，但不能操作State。
 * 14：说一说Node.js的**文件模块**，它是如何实现的呢？
 
 * 15：JS的**基本类型**有哪些？
