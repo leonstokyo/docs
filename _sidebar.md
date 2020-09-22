@@ -37,9 +37,3 @@
 * 服务器相关
     * [阿里云](/_ECS/aily_ecs.md)
     * [Linux](/_ECS/linux.md)
-
-* Magento2使用
-    * [接口相关](/_magento/api.md)
-
-* Magento2文档
-    * [文档翻译](/_magento/translation.md)
